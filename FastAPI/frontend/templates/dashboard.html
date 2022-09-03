@@ -1,0 +1,374 @@
+
+{% include 'header.html' %}
+<!-- Thanh navbar -->
+{% include 'navbar.html' %}
+<!-- Render layout thiết bị -->
+<body>
+<div class="container">
+
+    <div class="row device">
+        <div class="col-12">
+            <div class="selectCardForm bg-success">
+                <from>
+                    <div class="mb-3">
+                        <label for="" class="form-label selectCardFormLabel">Chọn NIC</label>
+                        <select class="browser-default custom-select">
+                            <option selected="">Mở menu để thực hiện chọn</option>
+                            <option value="1">Realtek PCIe GBE Family Controller </option>
+                            <option value="2">Realtek PCIe GBE Family Controller </option>
+                            <option value="3">Realtek PCIe GBE Family Controller </option>
+                          </select>
+    
+                          <button type="button" class="btn btn-connect">Kết nối</button>
+                          <button type="button" class="btn btn-off">Dừng</button>
+                    </div>
+                </from>
+
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="controlBar bg-success">
+                <from>
+                    <div class="mb-3">
+                        <label for="" class="form-label controlBarLabel">Cấu hình hiện tại đang sử dụng</label>
+                        <select class="browser-default custom-select">
+                            <option selected="">Mở menu để thực hiện chọn</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                          </select>
+                          <label class="containerCheckbox">Kích hoạt
+                            <input type="checkbox" checked="checked">
+                          </label>
+                          
+                          <label class="containerCheckbox">Lưu cấu hình
+                            <input type="checkbox">
+                          </label>
+                          <button type="button" class="btn btn-control">OK</button>
+                          <button type="button" class="btn btn-take">Lấy cấu hình</button>
+                    </div>
+                </from>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="boxGroupPower">
+                <div class="groupPowerLeds main-leds leds">
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB01" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB01</span>
+                        
+                    </div>
+                   
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB02" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB02</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB03" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB03</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB04" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB04</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB05" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB05</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB06" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB06</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB07" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB07</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB08" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB08</span>
+                    </div>
+
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB09" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB09</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB10" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB10</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB11" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB11</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB12" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB12</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB13" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB13</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i id = "SUB14" class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB14</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led main-led-tk fa-solid fa-circle"></i>
+                        <span class="ledIndex">TKCO1</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led main-led-tk fa-solid fa-circle"></i>
+                        <span class="ledIndex">DKX1</span>
+                    </div>
+            </div>
+
+        </div>
+        </div>
+        <div class="col-12">
+            <div class="boxGroupPower">
+                <div class="groupPowerLeds main-leds leds">
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB15</span>
+                        
+                    </div>
+                   
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB16</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led main-led-active fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB17</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB18</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB19</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB20</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB21</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB22</span>
+                    </div>
+
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB23</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB24</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB25</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB26</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB27</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SUB28</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led main-led-tk fa-solid fa-circle"></i>
+                        <span class="ledIndex">TKCO2</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led main-led-tk fa-solid fa-circle"></i>
+                        <span class="ledIndex">DKX2</span>
+                    </div>
+
+                
+            </div>
+
+        </div>
+        </div>
+
+
+
+        <div class="col-12">
+            <div class="timeSys">
+                <div class="time">
+
+                </div>
+                <div class="Texttime">
+                    TIME-SYSTEM DISPLAY
+                </div>
+            </div>
+            <div class="boxGroupPower">
+                <div class="groupPowerLeds main-leds leds">
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led-active fa-solid fa-circle"></i>
+                        <span class="ledIndex">75VAC</span>
+                        
+                    </div>
+                   
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">V-NEG</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led-active fa-solid fa-circle"></i>
+                        <span class="ledIndex">V-POS</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">V-IN</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">DSP</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">IPU</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led text-danger fa-solid fa-circle"></i>
+                        <span class="ledIndex">RUN</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">SYNC</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">LAN1</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">LAN2</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">WAN</span>
+                    </div>
+                    <div class="elementPowerLeds main-ledStatus">
+                        <i class="elementPowerLed main-led fa-solid fa-circle"></i>
+                        <span class="ledIndex">IPX</span>
+                    </div>
+                    
+                    
+                
+            </div>
+                
+            </div>
+
+        </div>
+
+        <div class="col-12 navTab">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item nav-item-icon" role="presentation">
+                  <button class="nav-link active tab" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Lịch sử cuộc gọi tới máy trực</button>
+                </li>
+                <li class="nav-item nav-item-icon" role="presentation">
+                  <button class="nav-link tab" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Giám sát dịch vụ hiện có của tổng đài</button>
+                </li>
+                
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">                   
+                <div class="boxContent">
+                    <div class="context">Máy trực 1: 659100</div>
+                    <div class="context">Máy trực 2: 659101</div>
+                    <div class="context">Máy trực 3: 659102</div>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <table class="table table-bordered border-primary">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">First</th>
+                            <th scope="col">Last</th>
+                            <th scope="col">Handle</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">3</th>
+                            <td colspan="2">Larry the Bird</td>
+                            <td>@twitter</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+                
+            </div>
+
+
+        </div>
+
+        </div>
+</div>
+<!-- <script>
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+    const time = $(".time");
+    var ws = new WebSocket("ws://0.0.0.0:8000/ws");
+        ws.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+            let temp = data.CPU
+            time.innerHTML = temp
+            // console.log(data.CPU)
+            // document.getElementById("cpu_percent").innerHTML = result.cpu_percent+'%'
+            // document.getElementById("cpu_temp").innerHTML = result.cpu_temp
+            // document.getElementById("cpu_percent_value").style.setProperty('--radius', result.cpu_percent+'deg');
+            
+            // var messages = document.getElementById('messages')
+            // var message = document.createElement('li')
+            // var content = document.createTextNode(result)
+            // var cpu =document.getElementById("test").innerHTML = result.cpu
+            // console.log(result.cpu.gpu)
+            // message.appendChild(content)
+            // messages.appendChild(message)
+        };
+</script> -->
+<!-- <script>
+    id = ["SUB01","SUB02", "SUB03", "SUB04", "SUB05"];
+    function led_active(id_name, class_name = "main-led-active") {
+        var element = document.getElementById(id_name);
+        element.classList.add(class_name);
+    }
+    for (let i = 0; i < id.length; i++) {
+        led_active(id[i]);
+    }
+</script> -->
+<script src="{{ url_for('static', path='js/websocket_cpu.js') }}"></script>
+
+</body>
+{% include 'footer.html' %}
+
+
+
+

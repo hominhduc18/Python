@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    {% include 'admin/include_static_css.html' %}
+    <title>TIP24 - {{title|default("Page")}}</title>
+    <style>
+        #chart_div {
+            width: 1200px;
+        }
+        .system-wrap{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #deebdd;;
+            margin-top: 24px;
+            padding: 32px;
+            border-radius: 12px;
+            flex-direction: column;
+        }
+        .system-wrap .title{
+            font-size: 32px;
+        }
+        .system-container {
+            width: 100%;
+        }
+        .gause-wrap{
+            display: flex;
+            padding: 0px 12px 12px 12px;
+            justify-content: space-around;
+            
+        }
+        .half-wrap{
+            width: 45%;
+        }
+        .curve-wrap{
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background-color: white;
+            border: 3px solid #00881da9;
+            margin: auto;
+        }
+        #curve_chart_cpu_freq{
+            width: 100%; 
+            height: 500px
+        }
+        .title-wrap{
+            width: 30%;
+            background-color: rgb(255, 255, 255);
+            text-align: center;
+            border-radius: 20px;
+            color: #333333;
+            margin-bottom: 12px;
+        }
+        .title-wrap h3{
+            font-weight: bold;
+            
+        }
+        .half-description{
+            width: 50%;
+        }
+        .full-description{
+            width: 100%;
+        }
+        .description{
+            border: 3px solid #00881da9;
+            border-radius: 12px;
+            margin: 8px;
+            padding: 12px;
+        }
+        .description-label h3{
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .description-label p {
+            font-size: 18px;
+            padding-left: 24px;
+        }
+        .half-wrap p{
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'admin/navbar.html' %}
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+
+                <div class="system-wrap">
+                    <div class="title-wrap">
+                        <h3 class="title">System</h3>
+                    </div>
+                    
+                    <div class="description full-description">
+                        <div class="gause-wrap">
+                            <div class = "half-wrap" id = "system1">
+
+                            </div>
+                            <div class = "half-wrap"  id = "system2">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="system-wrap">
+                    <div class="title-wrap">
+                        <h3 class="title">CPU</h3>
+                    </div>
+                    <div class="system-container">
+                        <div class="gause-wrap">
+                            <div id="chart_div_cpu_usage"></div>
+                            <div id="chart_div_cpu_temp"></div>
+                        </div>
+                        <div class="curve-wrap">
+                            <div id="curve_chart_cpu_freq"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="system-wrap">
+                    <div class="title-wrap">
+                        <h3 class="title">RAM & DISK</h3>
+                    </div>
+                    <div class="system-container">
+                        <div class="gause-wrap">
+                            <div class = "description half-description">
+                                <div class = "description-label">
+                                    <h3>RAM</h3>
+                                    <div id="ram">
+                                        
+                                    </div>
+                                </div>
+                                <div id="piechartRam" style="width: 100%; height: 360px;"></div>
+                            </div>
+                            <div class = "description half-description">
+                                <div class = "description-label">
+                                    <h3>DISK</h3>
+                                    <div id="disk">
+
+                                    </div>
+                                </div>
+                                <div id="piechartDisk" style="width: 100%; height: 360px;"></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script>
+    var host = window.location.host; 
+    // console.log(host)
+    var ws = new WebSocket(`ws://${host}/admin/sys`); // phai them admin
+    var cpu_use = 0;
+    var cpu_freq = 0;
+    var cpu_max_freq = 0;
+    var cpu_min_freq = 0;
+    var cpu_temp = 0;
+    var cpu = {
+        "Current_Frequency": 0,
+        "Max_Frequency": 0,
+        "Min_Frequency": 0,
+        "Physical_cores": 0,
+        "Temperatue_CPU": 0,
+        "Total_CPU_Usage": 0,
+    };
+    var ram = {
+    "Total_memory": 0,
+    "Available_memory": 0,
+    "Used_memory": 0,
+    "Percentage_memory": 0,
+    "Total_swap": 0,
+    "Free_swap": 0,
+    "Used_swap": 0,
+    "Percentage_swap": 0
+    };
+    var old_ram_percent = ram.Percentage_memory;
+    var flag_ram = true;
+    
+    var system = {
+        "System": "",
+        "Node": "",
+        "Release": "",
+        "Version": "",
+        "Machine": "",
+        "Processor": "",
+        "Boot_time": ""
+    };
+    var disk = {
+        "Total_disk": 0,
+        "Used_disk": 0,
+        "Free_disk": 0,
+        "Percent_used": 0,
+        "Percent_free": 0,
+        "Percent_other": 0,
+    }
+    var old_disk_used = disk.Used_disk;
+    var flag_disk = true;
+    
+    function updateRam(id = 'ram', RAM = ram){
+        idRam = document.getElementById(id);
+        let toGB = Math.pow(10, -9);
+        idRam.innerHTML = `<p>Total: ${(ram.Total_memory*toGB).toFixed(2)}GB</p><p>Usage: ${(ram.Used_memory*toGB).toFixed(2)}GB</p><p>Free: ${(ram.Available_memory*toGB).toFixed(2)}GB</p>`
+    }
+    function updateSystem(id = ["system1", 'system2'], SYSTEM = system){
+        idSystem1 = document.getElementById(id[0]);
+        idSystem1.innerHTML = `<p>System: ${system.System}</p>
+                                <p>Node: ${system.Node}</p>
+                                <p>Release: ${system.Release}</p>
+                                <p>Version: ${system.Version}</p>`
+        idSystem2 = document.getElementById(id[1]);
+        idSystem2.innerHTML = `<p>Boot time: ${system.Boot_time}</p>
+                                <p>Processor: ${system.Processor}</p>`
+    }
+    function updateDisk(id = 'disk', DISK = disk){
+        idRam = document.getElementById(id);
+        let toGB = Math.pow(10, -9);
+        idRam.innerHTML = `<p>Total: ${(DISK.Total_disk).toFixed(2)}GB</p><p>Usage: ${(DISK.Used_disk).toFixed(2)}GB</p><p>Free: ${(DISK.Free_disk).toFixed(2)}GB</p>`
+    }
+    google.charts.load('current', {'packages':['gauge','corechart']});
+
+    function drawPieChartRam(){
+        google.charts.setOnLoadCallback(drawChartRamUsage);
+        function drawChartRamUsage() {
+            var data = google.visualization.arrayToDataTable([
+                ['RAM', 'Usage'],
+                [`Use`,  ram.Percentage_memory],
+                [`Free`,  100-ram.Percentage_memory],
+                
+            ]);
+            
+            var options = {
+                legend: 'none',
+                pieStartAngle: 100,
+                backgroundColor: "transparent",
+                slices: {0: {color: '#228B22'}, 1: {color: '#32CD32'}},
+                pieSliceTextStyle: {fontSize: 18, bold: true, color: '#006400'},
+                tooltip: {textStyle: {color: '#FF0000'}, showColorCode: true,},
+                legend: {position: 'right', textStyle: {color: 'blue', fontSize: 16}}, 
+                pieHole: 0.2,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechartRam'));
+            chart.draw(data, options);
+            // setInterval(function() {
+            //     data.setValue(0,1,ram.Percentage_memory, 100-ram.Percentage_memory);
+            //     chart.draw(data, options);
+            // }, 1000);   
+        }
+    }
+
+    function drawPieChartDisk(){
+        google.charts.setOnLoadCallback(drawChartDiskUsage);
+        function drawChartDiskUsage() {
+            var data = google.visualization.arrayToDataTable([
+                ['Disk', 'Percent'],
+                [`Usage`,  disk.Percent_used],
+                [`Free`,  disk.Percent_free],
+                [`Other`,  disk.Percent_other],
+                
+            ]);
+            
+            var options = {
+                legend: 'none',
+                // pieSliceText: 'label',
+                // title: 'RAM usage',
+                // titleTextStyle: { 
+                //                 fontSize: 20,
+                //                 bold: true,
+                //                 },
+                pieStartAngle: 100,
+                backgroundColor: "transparent",
+                slices: {0: {color: '#228B22'}, 1: {color: '#32CD32'},2: {color: '#8FBC8F'}},
+                pieSliceTextStyle: {fontSize: 18, bold: true, color: '#006400'},
+                tooltip: {textStyle: {color: '#FF0000'}, showColorCode: true,},
+                legend: {position: 'right', textStyle: {color: 'blue', fontSize: 16}}, 
+                pieHole: 0.2,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechartDisk'));
+            
+            chart.draw(data, options);
+            
+            // setInterval(function() {
+            //     data.setValue(0,1, disk.Percent_used, disk.Percent_free, disk.Percent_other);
+            //     chart.draw(data, options);
+            // }, 1000);
+        }
+    }
+    
+    ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        cpu = data.cpu;
+        ram = data.ram;
+        system = data.system;
+        disk = data.disk;
+        updateSystem();
+        if (ram.Percentage_memory !== old_ram_percent){
+            old_ram_percent = ram.Percentage_memory;
+            flag_ram = true;
+        }
+        if(flag_ram){
+            flag_ram = false;
+            drawPieChartRam();
+            updateRam();
+        }
+
+        if (disk.Used_disk !== old_disk_used){
+            old_disk_used = disk.Used_disk;
+            flag_disk = true;
+        }
+        if(flag_disk){
+            flag_disk = false;
+            drawPieChartDisk();
+            updateDisk('disk', disk);
+        }
+
+    }
+   
+
+
+    google.charts.setOnLoadCallback(drawChartCpuUsage);
+    function drawChartCpuUsage() {
+        // console.log(value)
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['CPU', cpu.Total_CPU_Usage]
+        ]);
+
+        var options = {
+            animation:{
+                duration: 400,
+                easing: 'linear',},
+            width: 600, height: 200,
+            greenFrom: 0, greenTo: 50,
+            redFrom: 75, redTo: 100,
+            yellowFrom:50, yellowTo: 75,
+            minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div_cpu_usage'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+            data.setValue(0, 1, cpu.Total_CPU_Usage);
+            chart.draw(data, options);
+        }, 1000);   
+    }
+
+    google.charts.setOnLoadCallback(drawChartCpuTemp);
+    function drawChartCpuTemp() {
+        // console.log(value)
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Temperatue', cpu.Temperatue_CPU]
+        ]);
+
+        var options = {
+            animation:{
+                duration: 400,
+                easing: 'linear',},
+            width: 600, height: 200,
+            greenFrom: 0, greenTo: 75,
+            redFrom: 90, redTo: 100,
+            yellowFrom:75, yellowTo: 90,
+            minorTicks: 5, fontSize: 11
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div_cpu_temp'));
+
+        chart.draw(data, options);
+
+        setInterval(function() {
+            data.setValue(0, 1, cpu.Temperatue_CPU);
+            chart.draw(data, options);
+        }, 1000);   
+    }
+
+    google.charts.setOnLoadCallback(drawChartCpuFreq);
+    function drawChartCpuFreq() {
+        
+        var data = google.visualization.arrayToDataTable([
+            ['Time', 'Freq'],
+            [new Date(),  cpu.Current_Frequency],
+        ]);
+
+        var options = {
+            // animation:{
+            //     duration: 300,
+            //     easing: 'inAndOut',
+                
+            // },
+            title: 'CPU FREQ',
+            curveType: 'function',
+            legend: { position: 'top' , alignment: 'center'},
+            startup: true,
+            lineWidth: 2,
+            colors:['red','#004411'],
+            fontSize: 14,
+            vAxis: { title: "Mhz", minValue: cpu.Min_Frequency, maxValue: cpu.Max_Frequency},
+            hAxis: { title: "Time", format: 'HH:mm:ss'},
+            // explorer: { actions: ['dragToZoom', 'rightClickToReset'] },
+
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart_cpu_freq'));
+        chart.draw(data, options);
+        let index = 1;
+        setInterval(function() {
+            data.addRow([new Date(), cpu.Current_Frequency]);
+            chart.draw(data, options);
+            index++;
+        }, 1000);
+    }
+
+    
+
+    
+</script>
+{% include 'admin/include_static_js.html' %}
+</html>

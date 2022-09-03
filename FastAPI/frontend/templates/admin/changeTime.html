@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'admin/include_static_css.html' %}
+    <title>TIP24 - {{title|default("Page")}}</title>
+    <style>
+        .container{
+            display: flex;
+            justify-items: center;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+        .container h3 {
+            font-size: 32px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        #regions_div{
+            border: 3px solid rgb(59, 141, 5); border-radius: 2px;
+            width: 600px;
+             height: 380px;
+        }
+        .form{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            align-items: center;
+        }
+        .combo{
+            margin: 12px 0; 
+            width: 38%;
+            font-size: 18px;
+            height: 32px;
+        }
+        .form-submit{
+            width: 32%;
+            /* height: 32px; */
+        }
+        .time-system-wrap{
+            margin: 24px 0;
+            padding: 12px 24px;
+            background-color: var(--secondary-color);
+            text-align: center;
+            border-radius: 12px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    {% include 'admin/navbar.html' %}
+    <div class="container">
+        <div class="time-system-wrap"><h3 id = "time-system"></h3></div>
+        <div id="regions_div"></div>
+        <form action="/admin/change/time" method="POST" class="form" id="form-1">
+            <select class="combo" name="time_zone">
+                <option value="">Select....</option>
+                {% for timezone in TIME_ZONES %}
+                    <option value= {{timezone}} > {{timezone}}</option>
+                {% endfor %}
+            </select>
+            <button class="form-submit">OK</button>
+        </form>
+    </div>
+    
+</body>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        var host = window.location.host; 
+        var ws = new WebSocket(`ws://${host}/admin/change/time`); // phai them admin
+        var continent_code;
+        var countrie;
+        var utc = null;
+        var old_utc = utc;
+        var flag = true;
+        ws.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+            // console.log(data);
+            google.charts.load('current', {'packages':['geochart'],'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'});
+            
+            var element = document.getElementById("time-system");
+            element.innerHTML=`Time system: ${data.time} ${data.utc}`;
+            continent_code = data.location.Continent;
+            countrie = data.location.Countrie;
+            utc = data.utc;
+            if(old_utc === utc){
+                flag = false;
+            }else{
+                old_utc = utc;
+                flag = true;
+            }
+            if (flag === true){
+                
+                google.charts.setOnLoadCallback(drawRegionsMap);
+
+                function drawRegionsMap() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Country',"UTC"],
+                        [countrie, utc],
+                    ]);
+
+                    var options = {
+                            region: continent_code,
+                            
+                        };
+
+                    var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+                    chart.draw(data, options);
+                }
+                flag = false;
+            }
+        
+        }
+        
+    </script>
+    {% include 'admin/include_static_js.html' %}
+</html>
+
+
+  

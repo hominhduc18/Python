@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'admin/include_static_css.html' %}
+    <title>TIP24 - {{title|default("Page")}}</title>
+    <style>
+        .from-wraper{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 50px);
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'admin/navbar.html' %}
+    <div class="from-wraper">
+        <form action="/admin/change/ip" method="POST" class="form" id="form-1">
+          <h3 class="heading">Change IP Address</h3>
+          <div class="spacer"></div>
+          <div class="form-group">
+            <label for="fullname" class="form-label">IP</label>
+            <input id="fullname" name="ip" type="text" placeholder="Current IP: {{current_ip}}" class="form-control">
+            <span class="form-message"></span>
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Prefix</label>
+            <input id="password" name="prefix" type="text" placeholder="/24" class="form-control">
+            <span class="form-message"></span>
+          </div>
+          <p class = "submit-error">{{check}}</p>
+          <button class="form-submit">Change</button>
+        </form>
+      </div>
+</body>
+{% include 'admin/include_static_js.html' %}
+</html>
